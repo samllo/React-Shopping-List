@@ -1,20 +1,18 @@
 import { useState } from "react";
 import "./styles.css";
+import { NewTodoForm } from "./NewTodoForm";
 
 export default function App() {
-  const [newItem, setNewItem] = useState(""); // array destructuring
-
+  
   const [todos, setTodos] = useState([]);
 
-  function handleSubmit(e) {
-    e.preventDefault(); // stop refreshing
-    setTodos((currentToDos) => {
+  function addTodo(title) {
+    setTodos(currentTodos => {
       return [
-        ...currentToDos,
-        { id: crypto.randomUUID(), title: newItem, completed: false }, ///generating a unique identifier (UUID)
-      ];
-    });
-    setNewItem("")
+        ...currentTodos,
+        { id: crypto.randomUUID(), title, completed: false },
+      ]
+    })
   }
 
   function toggleTodo(id, completed){// * this completed
@@ -36,21 +34,10 @@ export default function App() {
   }
   return (
     <> {/* how to comment in jsx*/}
-      <form onSubmit={handleSubmit} className="new-item-form"> 
-        <div className="form-row">
-          <label htmlFor="item">New Item</label>
-          <input
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            type="text"
-            id="item"
-          ></input>
-        </div>
-        <button className="btn"> Add</button>
-      </form>
+      <NewTodoForm onSubmit={addTodo}/> {/*here we are creating props to pass to our component, our props is called on sumit and we are passing it addtodo*/}
       <h1 className="header">Todo List</h1>
       <ul className="list">
-        {todo.length === 0 && "No Todos" } {/* && short circuiting, if todos lentgh = 0 returns strings no todos*/}
+        {todos.length === 0 && "No Todos" } {/* && short circuiting, if todos lentgh = 0 returns strings no todos*/}
         {todos.map((todo) => {
           return (
             <li key={todo.id}> {/* add unique id to element to handle state in react*/}
