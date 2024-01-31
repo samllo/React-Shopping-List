@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles.css";
 import { NewTodoForm } from "./NewTodoForm";
 import { TodoList } from "./TodoList";
 
 export default function App() {
-  const [todos, setTodos] = useState([]);
+
+  // hooks must be called at top of function
+  const [todos, setTodos] = useState(()=>{
+    // checks local stroage and hgets value if exists 
+    const localValue = localStorage.getItem("ITEMS")
+    if(localValue == null)return[]
+     return JSON.parse(localValue);
+  });
+
+  useEffect(() => {
+    localStorage.setItem("ITEMS", JSON.stringify(todos));// set items property to json strigifid version of our todos
+  }, [todos]); // every time our todos change run this code 
 
   function addTodo(title) {
     setTodos((currentTodos) => {
